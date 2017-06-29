@@ -1,30 +1,22 @@
 import React, { Component } from "react";
+import Polyline from "polyline";
 import "./App.css";
 
 class App extends Component {
     constructor() {
         super();
         this.state = {
-            schools: [],
-            maps: []
+            schools: []
         };
     }
     render() {
-        let showMaps = () => {
-            let idList = [];
-            for (var i = 0; i < this.state.schools.length; i++) {
-                idList.push(this.state.schools[i].id);
-            }
-
-            return (
-                this.state.maps.map((mapUrl) => {
-                    return <img src={mapUrl} alt="" key={idList.shift()}/>;
-                })
-            );
-        };
         return (
             <div className="App">
-                {showMaps()}
+                {
+                    this.state.schools.map((school) => {
+                        return <img src={school.mapUrl} alt="" key={school.id} />;
+                    })
+                }
             </div>
         );
     }
@@ -36,36 +28,40 @@ class App extends Component {
         fetch(endpoint)
             .then(res => res.json())
             .then((data) => {
+                // Store school data from API
                 schoolsData.push(...data);
-                this.setState({
-                    schools: schoolsData
-                });
 
+                // Create the google static maps URLs
                 const apiKey = "AIzaSyAvatI8cHC0nqYUxmHGhCvt3k4GIasen3c";
                 const apiUrl = "http://maps.googleapis.com/maps/api/staticmap?";
-                const mapsList = [];
 
-                this.state.schools.forEach((school) => {
-                    let latitude = school.latitude;
-                    let longitude = school.longitude;
-                    let coordinates = school.boundaries.secondary[0];
-                    let boundaries = "";
+                schoolsData.forEach((school) => {
+                    const latitude = school.latitude;
+                    const longitude = school.longitude;
+                    let pathList = "";
 
-                    for (var i = 0; i < coordinates.length; i++) {
-                        boundaries += coordinates[i][0] + "," + coordinates[i][1] + "%7C";
-                    }
-                    boundaries += coordinates[0][0] + "," + coordinates[0][1]; // close the boundary shape by going back to the first point
+                    school.boundaries.secondary.forEach((region) => { // Some schools have unconnected regions for the boundaries, so we create a path for each one
+                        const coordinates = region;
+                        const boundaries = [];
 
-                    let params = `size=400x400&markers=color:blue%7Clabel:S%7C${latitude},${longitude}&path=color:0x0000ff%7Cweight:4%7Cfillcolor:0xFFFF0022%7C${boundaries}&key=`;
-                    let newUrl = apiUrl + params + apiKey;
-                    mapsList.push(newUrl);
-                    console.log(newUrl.length);
+                        for (var i = 0; i < coordinates.length; i++) {
+                            const point = [coordinates[i][0], coordinates[i][1]];
+                            boundaries.push(point);
+                        }
+                        boundaries.push([coordinates[0][0], coordinates[0][1]]); // close off the shape by adding the first point again
+                        const newPolyline = Polyline.encode(boundaries); // encode the array of points into a polyline
+
+                        pathList += `&path=color:0x0000ff%7Cweight:4%7Cfillcolor:0xFFFF0022%7Cenc:${newPolyline}`;
+                    });
+
+
+                    const params = `size=400x400&markers=color:blue%7Clabel:S%7C${latitude},${longitude}${pathList}&key=`;
+                    const newUrl = apiUrl + params + apiKey;
+                    school.mapUrl = newUrl;
                 });
 
-                console.log(mapsList);
-
                 this.setState({
-                    maps: mapsList
+                    schools: schoolsData
                 });
             });
 
