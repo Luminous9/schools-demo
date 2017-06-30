@@ -66,7 +66,7 @@ export default class Carousel extends Component {
 
         return (
             <div className="Carousel">
-                <button onClick={this.previousItem}>Previous</button>
+                <button onClick={this.previousItem}>{"<"}</button>
                 <div className="Carousel-container">
                     {
                         this.props.schools.map((school) => {
@@ -78,7 +78,7 @@ export default class Carousel extends Component {
                         })
                     }
                 </div>
-                <button onClick={this.nextItem}>Next</button>
+                <button onClick={this.nextItem}>{">"}</button>
             </div>
         );
     }
