@@ -12,6 +12,7 @@ export default class Carousel extends Component {
             visibleItems: null
         };
         this.getItemWidth = this.getItemWidth.bind(this);
+        this.getVisibleItems = this.getVisibleItems.bind(this);
         this.nextItem = this.nextItem.bind(this);
         this.previousItem = this.previousItem.bind(this);
     }

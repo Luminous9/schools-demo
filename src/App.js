@@ -61,7 +61,7 @@ class App extends Component {
                         pathList += `&path=color:0x0000ff%7Cweight:4%7Cfillcolor:0xFFFF0022%7Cenc:${newPolyline}`;
                     });
 
-                    const params = `size=400x400&markers=color:blue%7Clabel:S%7C${latitude},${longitude}${pathList}&key=`;
+                    const params = `size=330x260&markers=color:blue%7Clabel:S%7C${latitude},${longitude}${pathList}&key=`;
                     const newUrl = apiUrl + params + apiKey;
                     school.mapUrl = newUrl;
                 });

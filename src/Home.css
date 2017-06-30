@@ -1,0 +1,29 @@
+.Home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 85%;
+    max-width: 1200px;
+}
+
+.summary {
+    margin-bottom: 50px;
+}
+
+.features {
+    display: flex;
+}
+
+.schools {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 680px) {
+    .features {
+        flex-direction: column;
+    }
+}
