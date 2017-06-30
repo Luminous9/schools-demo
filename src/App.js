@@ -1,4 +1,12 @@
 import React, { Component } from "react";
+import {
+    BrowserRouter as Router,
+    NavLink as Link,
+    Route,
+    Switch
+} from "react-router-dom";
+import Home from "./Home";
+import Details from "./Details.js";
 import Polyline from "polyline";
 import "./App.css";
 
@@ -11,13 +19,14 @@ class App extends Component {
     }
     render() {
         return (
-            <div className="App">
-                {
-                    this.state.schools.map((school) => {
-                        return <img src={school.mapUrl} alt="" key={school.id} />;
-                    })
-                }
-            </div>
+            <Router>
+                <div>
+                    <Switch>
+                        <Route exact path="/" render={() => <Home schools={this.state.schools} />}/>
+                        <Route path="/:schoolName" component={Details} />
+                    </Switch>
+                </div>
+            </Router>
         );
     }
 
@@ -28,7 +37,6 @@ class App extends Component {
         fetch(endpoint)
             .then(res => res.json())
             .then((data) => {
-                // Store school data from API
                 schoolsData.push(...data);
 
                 // Create the google static maps URLs
@@ -54,7 +62,6 @@ class App extends Component {
                         pathList += `&path=color:0x0000ff%7Cweight:4%7Cfillcolor:0xFFFF0022%7Cenc:${newPolyline}`;
                     });
 
-
                     const params = `size=400x400&markers=color:blue%7Clabel:S%7C${latitude},${longitude}${pathList}&key=`;
                     const newUrl = apiUrl + params + apiKey;
                     school.mapUrl = newUrl;
@@ -64,7 +71,6 @@ class App extends Component {
                     schools: schoolsData
                 });
             });
-
     }
 }
 
