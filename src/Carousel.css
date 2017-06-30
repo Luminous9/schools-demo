@@ -1,0 +1,26 @@
+.Carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    border: 1px solid blue;
+}
+
+.Carousel-container {
+    display: flex;
+    overflow: hidden;
+    width: 85%;
+}
+
+.Carousel-container > a {
+    flex: none;
+    border: 1px solid red;
+    display: block;
+    position: relative;
+    /*left: 0px;*/
+    width: calc(100%/3 - 20px);
+    margin: 0 10px;
+    -webkit-transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    -moz-transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}

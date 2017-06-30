@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
     BrowserRouter as Router,
-    NavLink as Link,
     Route,
     Switch
 } from "react-router-dom";
@@ -20,7 +19,7 @@ class App extends Component {
     render() {
         return (
             <Router>
-                <div>
+                <div className="App">
                     <Switch>
                         <Route exact path="/" render={() => <Home schools={this.state.schools} />}/>
                         <Route path="/:schoolName" component={Details} />
